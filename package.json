@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "search-code-ia.helloWorld",
-        "title": "Hello World"
+        "command": "search-code-ia.searchCode",
+        "title": "Search code"
       }
     ]
   },
