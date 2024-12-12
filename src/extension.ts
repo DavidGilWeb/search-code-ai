@@ -25,20 +25,24 @@ export function activate(context: vscode.ExtensionContext) {
 		const selectedText = editor.document.getText(selection);
 
 		const allFiles = await vscode.workspace.findFiles('**/*.php');
+		const sameFile = editor.document.getText().match(new RegExp(selectedText, 'g'));
+		for (const file of allFiles) {
+			const content = await vscode.workspace.openTextDocument(file);
+			const fileWithText = content.getText();
 
-        for (const file of allFiles) {
-            const content = await vscode.workspace.openTextDocument(file);
-            const fileWithText = content.getText();
-
-            if (fileWithText.includes(selectedText)) {
-                arrFiles.push(file);
-            }
-        }
-		if(arrFiles.length === 0){
-		vscode.window.showWarningMessage('No existe el texto seleccionado.');
-		}else{
-		vscode.window.showInformationMessage(`El texto seleccionado aparece en ${arrFiles.length} archivos`);
+			if (fileWithText.includes(selectedText)) {
+				arrFiles.push(file);
+			}
+		}
 		
+		if (sameFile && sameFile.length > 1) {
+			vscode.window.showWarningMessage('Existe en el mismo código ' + sameFile);
+		}
+
+		if (arrFiles.length === 0) {
+			vscode.window.showWarningMessage('No existe el texto seleccionado.');
+		} else {
+			vscode.window.showInformationMessage(`El texto seleccionado aparece en ${arrFiles.length} archivos`);
 		}
 
 	});
@@ -46,4 +50,4 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }
