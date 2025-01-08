@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import { Console } from 'console';
 import * as vscode from 'vscode';
+import {PartialTextEditor, validEditor} from './util/valid-editor';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -36,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		
 		if (sameFile && sameFile.length > 1) {
-			vscode.window.showWarningMessage('Existe en el mismo código ' + sameFile);
+			vscode.window.showWarningMessage('Existe el mismo código más de una vez: ' + selectedText);
 		}
 
 		if (arrFiles.length === 0) {
@@ -51,3 +52,20 @@ export function activate(context: vscode.ExtensionContext) {
 
 // This method is called when your extension is deactivated
 export function deactivate() { }
+
+
+function commit(){
+
+	const editor = getActiveTextEditor();
+
+	if (!validEditor(editor)) {
+		vscode.window.showErrorMessage('Editor no válido');
+		return;
+	}
+
+	
+}
+
+function getActiveTextEditor(){ // getter to obtain the active text editor
+	return vscode.window.activeTextEditor;
+}
