@@ -10,17 +10,8 @@ export class GitUtils {
     this.filePath = filePath;
   }
 
-  /**
-   * Utility function to check if the file is in a git repository
-   *
-   * @returns true if the file is in a git repository, false otherwise
-   */
-  async isGitRepository(): Promise<boolean> {
-    if (await this.getRepositoryRoot()) {
-        return true;
-    } else {
-        return false;
-    }
+  async getGitLog(): Promise<string> {
+    return this.runGitCommand("log", this.filePath);
   }
 
   /**
@@ -32,6 +23,19 @@ export class GitUtils {
    */
   async getRepositoryRoot(): Promise<string> {
     return this.runGitCommand("rev-parse", "--show-toplevel", this.filePath);
+  }
+
+  /**
+   * Utility function to check if the file is in a git repository
+   *
+   * @returns true if the file is in a git repository, false otherwise
+   */
+  async isGitRepository(): Promise<boolean> {
+    if (await this.getRepositoryRoot()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**

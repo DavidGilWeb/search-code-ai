@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import { Console } from 'console';
 import * as vscode from 'vscode';
+import { GitUtils } from './git-utils';
 import {PartialTextEditor, validEditor} from './util/valid-editor';
 
 // This method is called when your extension is activated
@@ -21,7 +22,11 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showErrorMessage('No hay ningún editor activo.');
 			return;
 		}
+
+		const gitUtils = new GitUtils(editor.document.fileName);
 	
+		vscode.window.showInformationMessage("Git log " + await gitUtils.getGitLog());
+
 		const selection = editor.selection;
 		const selectedText = editor.document.getText(selection);
 
