@@ -25,7 +25,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const gitUtils = new GitUtils(editor.document.fileName);
 	
-		vscode.window.showInformationMessage("Git log " + await gitUtils.getGitLog());
+		const gitLogs = await gitUtils.getGitLog();
+		gitLogs.forEach((log) => {
+			console.log(log.message);
+		});
 
 		const selection = editor.selection;
 		const selectedText = editor.document.getText(selection);

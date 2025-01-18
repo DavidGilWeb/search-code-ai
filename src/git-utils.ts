@@ -1,5 +1,5 @@
 import { extensions } from "vscode";
-import { GitExtension } from "./types/git";
+import { GitExtension, GitLog } from "./types/git";
 import { execute } from "./util/execute";
 import { dirname } from "node:path";
 
@@ -10,8 +10,26 @@ export class GitUtils {
     this.filePath = filePath;
   }
 
-  async getGitLog(): Promise<string> {
-    return this.runGitCommand("log", this.filePath);
+  // TODO: git log -S "text" --pretty=format:%H --source --all
+
+  async getGitLog(): Promise<GitLog[]> {
+    const logOutput = await this.runGitCommand(
+      "log",
+      "--pretty=format:%H%n%an%n%ae%n%ad%n%s%n",
+      this.filePath
+    );
+    const commits = logOutput.split("\n\n").map((commit) => {
+      const [hash, authorName, authorEmail, date, ...message] =
+        commit.split("\n");
+      return {
+        hash,
+        authorName,
+        authorEmail,
+        date: new Date(date),
+        message: message.join("\n"),
+      };
+    });
+    return commits;
   }
 
   /**
