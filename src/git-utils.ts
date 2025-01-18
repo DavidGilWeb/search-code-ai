@@ -3,7 +3,7 @@ import { GitExtension } from "./types/git";
 import { execute } from "./util/execute";
 import { dirname } from "node:path";
 
-class GitUtils {
+export class GitUtils {
   filePath: string;
 
   constructor(filePath: string) {
@@ -12,24 +12,26 @@ class GitUtils {
 
   /**
    * Utility function to check if the file is in a git repository
-   * 
+   *
    * @returns true if the file is in a git repository, false otherwise
    */
   async isGitRepository(): Promise<boolean> {
-    return this.getRepositoryRoot()
-      .then(() => true)
-      .catch(() => false);
+    if (await this.getRepositoryRoot()) {
+        return true;
+    } else {
+        return false;
+    }
   }
 
   /**
    * Function to get the root of the git repository
    * where the file is located
-   * 
+   *
    * @returns root of the git repository
    * @throws error if the file is not in a git repository
    */
   async getRepositoryRoot(): Promise<string> {
-    return this.runGitCommand(this.filePath, "rev-parse", "--show-toplevel");
+    return this.runGitCommand("rev-parse", "--show-toplevel", this.filePath);
   }
 
   /**
