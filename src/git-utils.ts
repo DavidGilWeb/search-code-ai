@@ -5,9 +5,13 @@ import { dirname } from "node:path";
 
 export class GitUtils {
   filePath: string;
+  firstLineNumber: number;
+  secondLineNumber: number;
 
-  constructor(filePath: string) {
+  constructor(filePath: string, firstLineNumber: number, secondLineNumber:number) {
     this.filePath = filePath;
+    this.firstLineNumber = firstLineNumber;
+    this.secondLineNumber = secondLineNumber;
   }
 
   // TODO: git log -S "text" --pretty=format:%H --source --all
@@ -16,7 +20,7 @@ export class GitUtils {
     const logOutput = await this.runGitCommand(
       "log",
       "--pretty=format:%H%n%an%n%ae%n%ad%n%s%n",
-      this.filePath
+      "-L",this.firstLineNumber+","+this.secondLineNumber+":"+this.filePath
     );
     const commits = logOutput.split("\n\n").map((commit) => {
       const [hash, authorName, authorEmail, date, ...message] =

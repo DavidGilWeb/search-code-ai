@@ -23,7 +23,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
-		const gitUtils = new GitUtils(editor.document.fileName);
+		const gitUtils = new GitUtils(editor.document.fileName, editor.selection.start.line, editor.selection.end.line);
 	
 		const gitLogs = await gitUtils.getGitLog();
 		gitLogs.forEach((log) => {
