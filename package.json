@@ -15,9 +15,18 @@
     "commands": [
       {
         "command": "search-code-ia.searchCode",
-        "title": "Search code"
+        "title": "Search in git log"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "search-code-ia.searchCode",
+          "when": "editorHasSelection",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
